@@ -1,0 +1,17 @@
+INSERT INTO region_factor (state, factor) VALUES
+                                              ('Baden-Württemberg', 1.0),
+                                              ('Bayern', 1.1),
+                                              ('Berlin', 1.2),
+                                              ('Brandenburg', 1.0),
+                                              ('Bremen', 1.3),
+                                              ('Hamburg', 1.2),
+                                              ('Hessen', 1.0),
+                                              ('Mecklenburg-Vorpommern', 1.1),
+                                              ('Niedersachsen', 1.0),
+                                              ('Nordrhein-Westfalen', 1.1),
+                                              ('Rheinland-Pfalz', 1.0),
+                                              ('Saarland', 1.1),
+                                              ('Sachsen', 1.0),
+                                              ('Sachsen-Anhalt', 1.0),
+                                              ('Schleswig-Holstein', 1.0),
+                                              ('Thüringen', 1.0);

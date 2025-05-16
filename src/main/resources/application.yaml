@@ -1,0 +1,33 @@
+insurance-calculator:
+  port: 8443
+
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/insurance
+  hibernate-orm:
+    database:
+      generation: validate
+  flyway:
+    migrate-at-start: true
+  smallrye-openapi:
+    path: /q/openapi
+  http:
+    port: ${insurance-calculator.port:8080}
+    insecure-requests: redirect
+    ssl-port: ${insurance-calculator.port:8443}
+    ssl:
+      certificate:
+        key-store-file: keystore.p12
+        key-store-password: password
+        key-store-file-type: PKSC12
+
+vehicle:
+  factors:
+    CAR: 1.0
+    SUV: 1.2
+    TRUCK: 1.5
+    MOTORCYCLE: 0.8

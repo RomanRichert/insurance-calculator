@@ -43,3 +43,22 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 # TLS Certificates
 .certs/
+
+# Quarkus native build artifacts
+*.jar
+*.runner
+*.exe
+*.dll
+*.so
+*.dylib
+
+.gradle/
+build/
+
+# Node
+node_modules/
+dist/
+pnpm-lock.yaml
+npm-debug.log
+.yarn/
+.yarnrc.yml
