@@ -1,60 +1,66 @@
-# insurance-calculator
+# Insurance Premium Calculator
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This application calculates insurance premiums based on:
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+- Estimated annual mileage
+- Vehicle type
+- Vehicle registration location (ZIP/postal code)
 
-## Running the application in dev mode
+It provides a REST API for applicants and third-party integrations, and it persists all requests and results in a
+PostgreSQL database.
 
-You can run your application in dev mode that enables live coding using:
+---
 
-```shell script
-./mvnw quarkus:dev
+## How to Start the Application
+
+### Prerequisites
+
+- **Java 17+**
+- **Maven 3.9+**
+- **Docker** (required for local PostgreSQL via Testcontainers)
+
+### Run Locally
+
+```bash
+./mvnw clean compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> Quarkus will start in development mode with hot-reload enabled.  
+> The default port is `https://localhost:8443`.
 
-## Packaging and running the application
+---
 
-The application can be packaged using:
+## SSL Support
 
-```shell script
-./mvnw package
+The application supports HTTPS via self-signed certificates.
+To enable it, configure the following in `application.yaml`:
+
+```yaml
+quarkus:
+  http:
+    ssl:
+      certificate:
+        key-store-file: src/main/resources/keystore.p12
+        key-store-password: password
+      enable: true
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+A shell script `update-keystore.sh` is included to regenerate a self-signed certificate manually.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+---
 
-If you want to build an _über-jar_, execute the following command:
+## Technology Stack
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+- **Quarkus**: Chosen for its excellent developer experience, fast startup time, and native compilation support.
+- **Kotlin**: For concise syntax, null safety, and great interoperability with Java and Quarkus.
+- **PostgreSQL**: Reliable, production-ready open-source database with excellent support and advanced SQL.
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+---
 
-## Creating a native executable
+## Quality Assurance
 
-You can create a native executable using:
+- **Unit & Integration Testing**: JUnit 5, Mockito, RestAssured, and Testcontainers.
+- **Automatic Flyway migration** on startup.
+- **CSV Import** of ZIP code regions is enabled by default.
 
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/insurance-calculator-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- Kotlin ([guide](https://quarkus.io/guides/kotlin)): Write your services in Kotlin
-- REST resources for Hibernate Reactive with Panache ([guide](https://quarkus.io/guides/rest-data-panache)): Generate
-  Jakarta REST resources for your Hibernate Reactive Panache entities and repositories
+---

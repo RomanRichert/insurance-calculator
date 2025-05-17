@@ -7,15 +7,17 @@ import java.util.*
 
 @Entity
 @Table(name = "database_migration")
-class DatabaseMigration(
-    @Column(name = "file_name", nullable = false, unique = true)
-    var fileName: String,
-
-    @Column(name = "applied_at", nullable = false)
-    var appliedAt: LocalDateTime = LocalDateTime.now()
-) : PanacheEntityBase {
+class DatabaseMigration : PanacheEntityBase {
 
     @Id
-    @GeneratedValue
-    var id: UUID? = null
+    @GeneratedValue(generator = "UUID")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    lateinit var id: UUID
+
+    @Column(name = "file_name", nullable = false, unique = true)
+    lateinit var fileName: String
+
+    @Suppress("unused")
+    @Column(name = "applied_at", nullable = false)
+    var appliedAt: LocalDateTime = LocalDateTime.now()
 }

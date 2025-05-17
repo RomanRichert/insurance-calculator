@@ -1,29 +1,59 @@
 insurance-calculator:
-  port: 8443
+  port: 8080
+  ssl-port: 8443
 
 quarkus:
+
+  swagger-ui:
+    enable: true
+    path: /q/swagger
+    always-include: true
+
+  log:
+    file:
+      enable: true
+      path: logs/application.log
+      format: "%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
+    level: INFO
+    category:
+      "io.quarkus":
+        level: WARN
+      "org.flywaydb":
+        level: INFO
+      "io.quarkus.runtime":
+        level: ERROR
+      "com.scopevisio":
+        level: DEBUG
+    console:
+      format: "%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
+      json: false
+
   datasource:
     db-kind: postgresql
     username: postgres
     password: postgres
     jdbc:
-      url: jdbc:postgresql://localhost:5432/insurance
+      url: jdbc:postgresql://db:5432/insurance
+
   hibernate-orm:
     database:
       generation: validate
+
   flyway:
     migrate-at-start: true
+
   smallrye-openapi:
     path: /q/openapi
+
   http:
     port: ${insurance-calculator.port:8080}
     insecure-requests: redirect
-    ssl-port: ${insurance-calculator.port:8443}
+    ssl-port: ${insurance-calculator.ssl-port:8443}
     ssl:
       certificate:
-        key-store-file: keystore.p12
+        key-store-file: src/main/resources/keystore.p12
         key-store-password: password
-        key-store-file-type: PKSC12
+        key-store-file-type: PKCS12
 
 vehicle:
   factors:
@@ -31,3 +61,7 @@ vehicle:
     SUV: 1.2
     TRUCK: 1.5
     MOTORCYCLE: 0.8
+
+csv:
+  import-enabled: true
+  import-folder: /data

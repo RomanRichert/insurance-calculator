@@ -18,11 +18,7 @@ class PremiumCalculationService(
     private val logger: Logger = Logger.getLogger(javaClass)
 
     @Transactional
-    fun calculatePremium(
-        postalCode: String,
-        vehicleType: VehicleType,
-        annualMileage: Int
-    ): Double {
+    fun calculatePremium(postalCode: String, vehicleType: VehicleType, annualMileage: Int): Double {
         val mileageFactor = mileageFactor(annualMileage)
 
         val postCode = postCodeRepository.find("postalCode", postalCode).firstResult()
@@ -40,11 +36,12 @@ class PremiumCalculationService(
         return premium
     }
 
-    private fun mileageFactor(mileage: Int): Double =
-        when (mileage) {
+    private fun mileageFactor(mileage: Int): Double {
+        return when (mileage) {
             in 0..5_000 -> 0.5
             in 5_001..10_000 -> 1.0
             in 10_001..20_000 -> 1.5
             else -> 2.0
         }
+    }
 }

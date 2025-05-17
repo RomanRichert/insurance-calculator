@@ -2,7 +2,7 @@ package com.scopevisio.insurance.vehicle
 
 import io.smallrye.config.ConfigMapping
 
-@ConfigMapping(prefix = "vehicle.factors")
+@ConfigMapping(prefix = "vehicle")
 interface VehicleFactorConfig {
-    fun get(): Map<String, Double>
+    fun factors(): Map<String, Double>
 }

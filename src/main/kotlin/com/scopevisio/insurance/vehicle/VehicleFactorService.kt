@@ -17,8 +17,12 @@ class VehicleFactorService {
     )
 
     fun getFactor(type: VehicleType): Double {
-        val custom = config.get()[type.name]
+        val custom = config.factors()[type.name]
         return custom ?: defaultFactors[type]
         ?: throw IllegalArgumentException("No factor configured for vehicle type: ${type.name}")
+    }
+
+    fun getAllFactors(): Map<VehicleType, Double> {
+        return VehicleType.entries.associateWith { getFactor(it) }
     }
 }

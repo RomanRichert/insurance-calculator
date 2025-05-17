@@ -1,0 +1,13 @@
+quarkus:
+  http:
+    insecure-requests: enabled
+    ssl:
+      enable: false
+  log:
+    level: INFO
+  flyway:
+    migrate-at-start: true
+    clean-at-start: true
+
+csv:
+  import-enabled: true

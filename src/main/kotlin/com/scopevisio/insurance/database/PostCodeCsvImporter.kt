@@ -1,6 +1,6 @@
 package com.scopevisio.insurance.database
 
-import com.scopevisio.insurance.postcode.PostCode
+import com.scopevisio.insurance.postcode.model.PostCode
 import com.scopevisio.insurance.utils.or
 import com.scopevisio.insurance.utils.orThrow
 import jakarta.enterprise.context.ApplicationScoped
@@ -16,8 +16,14 @@ class PostCodeCsvImporter : CsvImporter {
     )
 
     override fun import(rows: List<Map<String, String>>) {
+        logger.debug("CSV headers: ${rows.firstOrNull()?.keys}")
+
         val missing = requiredFields.filter { field -> rows.firstOrNull()?.containsKey(field) != true }
-        if (missing.isNotEmpty()) throw IllegalArgumentException("Missing required CSV fields: $missing")
+        if (missing.isNotEmpty()) {
+            val headers = rows.firstOrNull()?.keys?.joinToString(", ") ?: "NO ROWS"
+            logger.error("CSV header: $headers")
+            throw IllegalArgumentException("Missing required CSV fields: $missing")
+        }
 
         var count = 0
         for (row in rows) {

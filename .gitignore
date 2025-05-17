@@ -54,6 +54,8 @@ nb-configuration.xml
 
 .gradle/
 build/
+*.log.*
+*.log
 
 # Node
 node_modules/

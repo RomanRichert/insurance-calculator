@@ -8,14 +8,19 @@ import jakarta.inject.Inject
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import jakarta.transaction.Transactional.TxType.REQUIRED
+import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.jboss.logging.Logger
 import java.io.File
+import java.util.*
 
 @Startup
 @ApplicationScoped
 class CsvImportCoordinator {
 
-    private val logger: Logger = Logger.getLogger(javaClass.name)
+    val logger: Logger by lazy { Logger.getLogger("CsvImportCoordinator") }
+
+    @ConfigProperty(name = "csv.import-enabled", defaultValue = "false")
+    private lateinit var importEnabled: Optional<Boolean>
 
     @Inject
     private lateinit var importers: Instance<CsvImporter>
@@ -23,20 +28,20 @@ class CsvImportCoordinator {
     @Inject
     private lateinit var entityManager: EntityManager
 
-    private val folder = "/data"
-
-    @Transactional(REQUIRED)
-    fun ensureUuidExtension() {
-        entityManager.createNativeQuery("""CREATE EXTENSION IF NOT EXISTS "uuid-ossp";""").executeUpdate()
-        logger.info("UUID extension ensured.")
-    }
+    @ConfigProperty(name = "csv.import-folder", defaultValue = "/data")
+    private lateinit var folder: String
 
     @PostConstruct
-    fun run() {
-        ensureUuidExtension()
+    fun initialize() {
+        if (!importEnabled.get()) return
+        importCsvData()
+        logger.info("Application started successfully.")
+    }
 
-        val folderURL = javaClass.getResource(folder)
-            ?: throw IllegalStateException("Folder not found: $folder")
+    @Transactional(REQUIRED)
+    fun importCsvData() {
+
+        val folderURL = javaClass.getResource(folder) ?: throw IllegalStateException("Folder not found: $folder")
 
         val files = File(folderURL.toURI()).listFiles { f -> f.extension == "csv" } ?: return
 
@@ -54,9 +59,14 @@ class CsvImportCoordinator {
             val rows = file.inputStream().use { GenericCsvImporterSupport.parseCsv(it) }
             logger.debug("Parsed CSV file: ${file.name} — ${rows.size} records")
 
-            importers.get().import(rows)
+            try {
+                importers.get().import(rows)
+            } catch (ex: IllegalArgumentException) {
+                logger.error("Error occurred while importing PostCode CSV: ${ex.message}")
+                throw ex
+            }
 
-            val migration = DatabaseMigration(file.name)
+            val migration = DatabaseMigration().apply { this.fileName = file.name }
             entityManager.persist(migration)
             logger.info("Imported: ${file.name}")
         }
