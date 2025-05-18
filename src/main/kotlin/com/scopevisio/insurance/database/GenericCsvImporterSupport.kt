@@ -7,6 +7,17 @@ import java.io.InputStreamReader
 
 object GenericCsvImporterSupport {
 
+    /**
+     * The parser is configured to:
+     * - use UTF-8 encoding,
+     * - read headers from the first line,
+     * - skip the header when processing records,
+     * - ignore empty lines,
+     * - trim both keys and values.
+     *
+     * @param input the CSV file input stream
+     * @return list of parsed records as key-value maps
+     */
     fun parseCsv(input: InputStream): List<Map<String, String>> {
         val reader = InputStreamReader(input, Charsets.UTF_8)
 

@@ -21,7 +21,7 @@ open class InsuranceRequestResourceTest {
     fun createInsuranceRequestTest() {
         val request = InsuranceRequestDTO(
             postalCode = "53721",
-            vehicleType = VehicleType.CAR,
+            vehicleType = VehicleType.CAR.name,
             annualMileage = 15000
         )
 
@@ -88,7 +88,7 @@ open class InsuranceRequestResourceTest {
     protected fun createTestInsuranceRequest(): UUID {
         val request = InsuranceRequestDTO(
             postalCode = "53721",
-            vehicleType = VehicleType.CAR,
+            vehicleType = VehicleType.CAR.name,
             annualMileage = 30000
         )
 

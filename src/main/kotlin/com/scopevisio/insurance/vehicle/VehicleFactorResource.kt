@@ -18,7 +18,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag
 class VehicleFactorResource {
 
     @Inject
-    lateinit var vehicleFactorService: VehicleFactorService
+    private lateinit var vehicleFactorService: VehicleFactorService
 
     @GET
     @Operation(summary = "List all configured vehicle factors")

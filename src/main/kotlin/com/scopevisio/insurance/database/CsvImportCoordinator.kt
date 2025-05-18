@@ -31,19 +31,60 @@ class CsvImportCoordinator {
     @ConfigProperty(name = "csv.import-folder", defaultValue = "/data")
     private lateinit var folder: String
 
+    @ConfigProperty(name = "quarkus.http.port")
+    private lateinit var httpPort: String
+
+    @ConfigProperty(name = "quarkus.http.ssl-port")
+    private lateinit var sslPort: Optional<String>
+
+    /**
+     * Initializes the CSV import process after application startup and logs
+     * the startup URLs to the console.
+     */
     @PostConstruct
     fun initialize() {
-        if (!importEnabled.get()) return
-        importCsvData()
-        logger.info("Application started successfully.")
+        performCsvImport()
+        logStartup()
     }
 
+    private fun logStartup() {
+        logger.info("Application started successfully.")
+        var startupMessage = "Running on http://localhost:$httpPort"
+        if (sslPort.isPresent) {
+            startupMessage += " and https://localhost:${sslPort.get()}"
+        }
+        logger.info(startupMessage)
+    }
+
+    private fun performCsvImport() {
+        logger.info("CSV import enabled: ${importEnabled.orElse(false)}")
+        if (!importEnabled.get()) return
+
+        logger.info("Starting CSV import...")
+        importCsvData()
+    }
+
+    /**
+     * Main logic for importing all `.csv` files in the configured import folder.
+     * Skips files that are already registered in the `DatabaseMigration` table.
+     *
+     * Each file is:
+     * - parsed using `GenericCsvImporterSupport`,
+     * - passed to an injected `CsvImporter`,
+     * - marked as imported via a `DatabaseMigration` record.
+     *
+     * If a file has already been imported (based on its name), it is skipped.
+     * @see GenericCsvImporterSupport
+     * @see CsvImporter
+     */
     @Transactional(REQUIRED)
     fun importCsvData() {
 
-        val folderURL = javaClass.getResource(folder) ?: throw IllegalStateException("Folder not found: $folder")
-
-        val files = File(folderURL.toURI()).listFiles { f -> f.extension == "csv" } ?: return
+        val folderFile = File(folder)
+        if (!folderFile.exists() || !folderFile.isDirectory) {
+            throw IllegalStateException("Folder not found or not a directory: $folder")
+        }
+        val files = folderFile.listFiles { f -> f.extension == "csv" } ?: return
 
         for (file in files.sortedBy { it.name }) {
             val alreadyImported = entityManager.createQuery(

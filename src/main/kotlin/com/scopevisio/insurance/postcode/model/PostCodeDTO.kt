@@ -8,7 +8,7 @@ data class PostCodeDTO(
     @field:Schema(description = "Postleitzahl", example = "10115")
     val postalCode: String,
 
-    @field:Schema(description = "Bundesland / REGION1", example = "Berlin")
+    @field:Schema(description = "REGION1", example = "Berlin")
     val state: String,
 
     @field:Schema(description = "REGION2", example = "Berlin")

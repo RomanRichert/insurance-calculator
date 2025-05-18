@@ -38,8 +38,8 @@ class InsuranceRequestService(private val premiumCalculationService: PremiumCalc
         return insuranceRequestRepository.findPaged(page, size)
     }
 
-    fun deleteById(id: UUID) {
+    fun deleteById(id: UUID): Boolean {
         val deleted = insuranceRequestRepository.deleteById(id)
-        if (!deleted) throw NotFoundException("Insurance request not found: $id")
+        return if (deleted) true else throw NotFoundException("Insurance request not found: $id")
     }
 }

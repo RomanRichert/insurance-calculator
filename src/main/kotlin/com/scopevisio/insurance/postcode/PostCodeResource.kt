@@ -6,6 +6,9 @@ import com.scopevisio.insurance.utils.toDTO
 import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import jakarta.transaction.Transactional.TxType.SUPPORTS
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.PositiveOrZero
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import org.eclipse.microprofile.openapi.annotations.Operation
@@ -22,17 +25,18 @@ class PostCodeResource {
     private lateinit var postCodeService: PostCodeService
 
     @GET
+    @Valid
     @Transactional(SUPPORTS)
     @Operation(summary = "Get postcodes with optional filters and pagination")
     fun getPostCodes(
-        @QueryParam("postalCode") postalCode: String?,
-        @QueryParam("state") state: String?,
-        @QueryParam("region") region: String?,
-        @QueryParam("district") district: String?,
-        @QueryParam("city") city: String?,
-        @QueryParam("quarter") quarter: String?,
-        @QueryParam("page") page: Int = 0,
-        @QueryParam("size") size: Int? = 20
+        @NotBlank @QueryParam("postalCode") postalCode: String?,
+        @NotBlank @QueryParam("state") state: String?,
+        @NotBlank @QueryParam("region") region: String?,
+        @NotBlank @QueryParam("district") district: String?,
+        @NotBlank @QueryParam("city") city: String?,
+        @NotBlank @QueryParam("quarter") quarter: String?,
+        @PositiveOrZero @QueryParam("page") page: Int = 0,
+        @PositiveOrZero @QueryParam("size") size: Int? = 20
     ): List<PostCodeDTO> {
 
         return postCodeService

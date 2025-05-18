@@ -5,6 +5,8 @@ WORKDIR /app
 COPY target/quarkus-app/lib/ /app/lib/
 COPY target/quarkus-app/quarkus-run.jar /app/
 COPY target/quarkus-app/app/ /app/app/
+COPY ./src/main/resources/data /data
+COPY ./src/main/resources/keystore.p12 /app/keystore.p12
 COPY target/quarkus-app/quarkus/ /app/quarkus/
 
 ENTRYPOINT ["java", "-jar", "/app/quarkus-run.jar"]

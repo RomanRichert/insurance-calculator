@@ -8,6 +8,16 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.transaction.Transactional
 import org.jboss.logging.Logger
 
+/**
+ * Service responsible for calculating the insurance premium based on:
+ * - annual mileage
+ * - vehicle type
+ * - regional factor derived from the postal code
+ *
+ * The premium is calculated using the following formula:
+ *
+ * `mileageFactor * vehicleTypeFactor * regionFactor`
+ */
 @ApplicationScoped
 class PremiumCalculationService(
     private val vehicleFactorService: VehicleFactorService,
