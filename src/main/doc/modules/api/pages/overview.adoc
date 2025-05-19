@@ -102,15 +102,33 @@ When running the application with the default configuration:
 | Backend (HTTPS)
 | https://localhost:8443
 
-| Swagger
-| /q/swagger
-
 | PostgreSQL (in container)
 | db:5432
 
 | PostgreSQL (host access)
 | localhost:15432
 |===
+
+== Monitoring and Observability
+
+The system provides built-in observability via Prometheus and Grafana.
+
+=== Monitoring Tools
+
+[cols="2,3",options="header"]
+|===
+| Tool | Access
+
+| Prometheus | http://localhost:9090
+| Grafana | http://localhost:3001
+| Swagger UI | https://localhost:8443/q/swagger
+| OpenAPI | https://localhost:8443/q/openapi
+| Metrics | https://localhost:8443/q/metrics
+|===
+
+Prometheus scrapes metrics from the Quarkus backend (/q/metrics) and visualizes them via Grafana.
+
+    All observability endpoints are exposed by the backend and available only via HTTPS by default.
 
 == Development Notes
 

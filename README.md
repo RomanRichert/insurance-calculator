@@ -61,10 +61,34 @@ This will:
 |-----------------|----------|---------|--------------------------------------------------------------|
 | Frontend (Nuxt) | HTTP     | `3000`  | Accessible at [http://localhost:3000](http://localhost:3000) |
 | Backend (API)   | HTTP     | `8080`  | Redirects to HTTPS by default                                |
-| Backend (API)   | HTTPS    | `8443`  | Main API endpoint                                            |
-| Swagger         | -        | -       | Endpoint: /q/swagger                                         |
+| Backend (API)   | HTTPS    | `8443`  | Main API endpoint                                            | |
 | PostgreSQL      | TCP      | `5432`  | Internal to Docker network                                   |
 | PostgreSQL      | TCP      | `15432` | Exposed for development                                      |
+
+---
+
+## Monitoring and Observability
+
+This project includes **Prometheus** and **Grafana** for application monitoring, metric scraping, and dashboard
+visualization.
+
+### Included Tools
+
+| Tool       | Description                        | Default Port / Path   |
+|------------|------------------------------------|-----------------------|
+| Prometheus | Metrics collector (scrapes app)    | http://localhost:9090 |
+| Grafana    | Dashboard and metric visualization | http://localhost:3001 |
+
+### Application Endpoints
+
+| Feature            | Path                             |
+|--------------------|----------------------------------|
+| Swagger UI         | https://localhost:8443/q/swagger |
+| OpenAPI Schema     | https://localhost:8443/q/openapi |
+| Prometheus Metrics | https://localhost:8443/q/metrics |
+
+> All observability endpoints are available over HTTPS.
+---
 
 ## SSL Support
 
@@ -156,6 +180,5 @@ These features were considered but deprioritized due to time constraints:
 
 - Authorization via Keycloak for securing API endpoints
 - Frontend routing and navigation to multiple pages to reflect each backend domain
-- Integration with Prometheus and Grafana
 
 ---

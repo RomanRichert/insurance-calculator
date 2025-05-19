@@ -3,6 +3,17 @@ insurance-calculator:
   ssl-port: 8443
 
 quarkus:
+  micrometer:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        path: /q/metrics
+    binder:
+      http-server:
+        enabled: true
+      vertx:
+        enabled: true
 
   swagger-ui:
     enable: true
