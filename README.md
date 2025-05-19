@@ -18,8 +18,7 @@ PostgreSQL database.
 - **Java 17+**
 - **Maven 3.9+**
 - **Docker** (required for local PostgreSQL via Testcontainers)
--
-    - **pnpm** (`npm install -g pnpm`)
+- **pnpm** (`npm install -g pnpm`)
 
 ### Run Locally
 
