@@ -1,0 +1,58 @@
+= Postcode Registry API
+:page-aliases: api-postcodes.adoc
+:source-language: http
+
+== Overview
+
+Provides filtered, paginated access to postcode records imported via CSV.
+Each postcode may include regional metadata like city, district, and state.
+
+Base path: `/api/postcodes`
+
+== GET `/api/postcodes`
+
+Returns postcodes that match specified filters.
+All filters are optional; results are paginated.
+
+=== Query Parameters
+
+|===
+| Name         | Type   | Description
+| `postalCode` | String | Exact match of the postal code (e.g. `50667`)
+| `state`      | String | Two-letter federal state code (e.g. `NRW`)
+| `region`     | String | Optional region name
+| `district`   | String | Optional district name
+| `city`       | String | Optional city name
+| `quarter`    | String | Optional city quarter
+| `page`       | Int    | Page number (zero-based), default `0`
+| `size`       | Int    | Page size, default `20`
+|===
+
+=== Example Request
+
+[source,http]
+----
+GET /api/postcodes?postalCode=50667&state=NRW&page=0&size=10
+----
+
+=== Example Response `200 OK`
+
+[source,json]
+----
+[
+  {
+    "postalCode": "50667",
+    "state": "NRW",
+    "region": "Köln",
+    "district": "Innenstadt",
+    "city": "Köln",
+    "quarter": "Altstadt-Nord"
+  }
+]
+----
+
+== Notes
+
+- Missing filters will be ignored.
+- Results are paged.
+- All data is read-only and populated via CSV import at startup.

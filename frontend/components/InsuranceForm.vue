@@ -73,8 +73,10 @@
 import {computed, ref} from 'vue'
 import type {InsuranceRequestDTO} from '~/types/InsuranceRequest'
 import {useInsuranceStore} from '~/stores/insurance'
+import {useVehicleStore} from '~/stores/vehicle'
 
 const store = useInsuranceStore()
+const vehicleStore = useVehicleStore()
 
 // Form state
 const form = ref<InsuranceRequestDTO>({
@@ -83,13 +85,9 @@ const form = ref<InsuranceRequestDTO>({
   annualMileage: 0,
 })
 
-// Dropdown options
-const vehicleTypes = [
-  {label: 'Car', value: 'CAR'},
-  {label: 'SUV', value: 'SUV'},
-  {label: 'Motorcycle', value: 'MOTORCYCLE'},
-  {label: 'Truck', value: 'TRUCK'},
-]
+onMounted(async () => {
+  await vehicleStore.loadFactors()
+})
 
 // Validation
 const isValid = computed(() =>
@@ -103,6 +101,7 @@ const submit = async () => {
 }
 
 // Result from store
+const vehicleTypes = computed(() => vehicleStore.vehicleTypes)
 const result = computed(() => store.result)
 const isLoading = computed(() => store.isLoading)
 </script>

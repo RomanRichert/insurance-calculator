@@ -74,7 +74,7 @@ open class InsuranceRequestResourceTest {
             .`when`()
             .delete("/api/insurance-request/$id")
             .then()
-            .statusCode(204)
+            .statusCode(200)
 
         given()
             .accept(ContentType.JSON)

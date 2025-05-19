@@ -1,0 +1,121 @@
+= Project Overview
+
+== Technology Stack
+
+=== Backend
+
+- Quarkus 3 (Jakarta EE, RESTEasy Reactive)
+- Kotlin
+- Hibernate ORM + Panache
+- PostgreSQL
+- Flyway (database migration)
+- CSV import via Apache Commons CSV
+- OpenAPI (Swagger UI)
+- CORS and Exception Handling support
+- SSL via self-signed keystore
+
+=== Frontend
+
+- Nuxt 3
+- Vue 3
+- PrimeVue
+- TypeScript + Pinia for state management
+
+== Features
+
+* Premium calculation via input form or API
+* Historical log of all requests with full data
+* Dynamic CSV import for postcode mapping
+* Factor configuration via application config
+* Global error handling and JSON error structure
+* Request logging with interceptor
+* Full HTTPS support with keystore (self-signed)
+* Manual keystore renewal script:
+
+[source,bash]
+----
+cd ../../../../../
+chmod +x ./update-keystore.sh
+./update-keystore.sh
+----
+
+* Full-stack startup with `docker-compose` via
+
+[source,bash]
+----
+cd ../../../../../
+chmod +x ./build-and-run.sh
+./build-and-run.sh
+----
+
+* Database migrations via Flyway
+* Modular and extensible architecture
+
+== Premium Formula
+
+The premium is calculated using:
+
+[source]
+----
+premium = mileageFactor * vehicleFactor * regionFactor
+----
+
+Each component is resolved based on user input and imported configuration data.
+
+== Architecture
+
+[plantuml,format=svg]
+----
+@startuml
+actor User
+participant "Frontend (Nuxt)" as FE
+participant "Backend (Quarkus)" as BE
+database "PostgreSQL" as DB
+
+User -> FE : enters input
+FE -> BE : POST /insurance-request
+BE -> DB : persist request
+BE -> DB : lookup factors
+BE --> FE : return calculated premium
+
+User -> FE : views history
+FE -> BE : GET /insurance-request
+BE -> DB : fetch all
+BE --> FE : return list
+@enduml
+----
+
+== Default Ports and Access
+
+When running the application with the default configuration:
+
+[cols="2,3",options="header"]
+|===
+| Service | URL / Host
+
+| Frontend (Nuxt)
+| http://localhost:3000
+
+| Backend (HTTP)
+| http://localhost:8080
+
+| Backend (HTTPS)
+| https://localhost:8443
+
+| Swagger
+| /q/swagger
+
+| PostgreSQL (in container)
+| db:5432
+
+| PostgreSQL (host access)
+| localhost:15432
+|===
+
+== Development Notes
+
+* CORS support is enabled via a JAX-RS response filter (`CorsFilter.kt`)
+* CSV files for postcode data are placed in `src/main/resources/data`
+* All user-facing errors follow a uniform structure (`ErrorResponse`)
+* Vehicle and region factors are injected via config mapping
+* SSL enabled by default; replace `keystore.p12` manually if needed

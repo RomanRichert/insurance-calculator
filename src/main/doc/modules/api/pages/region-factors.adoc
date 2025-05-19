@@ -1,0 +1,37 @@
+= Region Factors API
+:page-aliases: api-region-factors.adoc
+:source-language: http
+
+== Overview
+
+Region factors influence the final premium and are linked to German states.
+This endpoint provides read-only access to all region factors in the system.
+
+Base path: `/api/region-factors`
+
+== GET `/api/region-factors`
+
+Returns all configured region-based premium factors.
+
+=== Response `200 OK`
+
+[source,json]
+----
+[
+  {
+    "state": "NRW",
+    "factor": 1.2
+  },
+  {
+    "state": "BE",
+    "factor": 0.9
+  }
+]
+----
+
+== Notes
+
+- The list is static and reflects the current configuration / state in the database.
+- Each entry maps a two-letter federal state code (`state`) to a numeric factor (`factor`).
+- This endpoint is useful for diagnostics or UI configuration.
+

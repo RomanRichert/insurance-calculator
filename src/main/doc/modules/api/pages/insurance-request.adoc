@@ -1,0 +1,116 @@
+= Insurance Request API
+:page-aliases: api-insurance.adoc
+:source-language: http
+
+== Overview
+
+This endpoint allows submitting insurance calculation requests, retrieving past entries, and deleting records.
+
+Base path: `/api/insurance-request`
+
+== POST `/api/insurance-request`
+
+[cols="1,4",options="header"]
+|===
+| Field | Description
+
+| postalCode
+| German postal code (e.g. `10115`)
+
+| vehicleType
+| Vehicle type (`CAR`, `SUV`, `TRUCK`, `MOTORCYCLE`)
+
+| annualMileage
+| Annual mileage in kilometers (positive integer)
+|===
+
+=== Request
+
+[source,json]
+----
+{
+  "postalCode": "50667",
+  "vehicleType": "SUV",
+  "annualMileage": 15000
+}
+----
+
+=== Response `200 OK`
+
+[source,json]
+----
+{
+  "id": "d01a4e35-01c9-4343-b09f-b9bd6eadbbdf",
+  "postalCode": "50667",
+  "vehicleType": "SUV",
+  "annualMileage": 15000,
+  "calculatedPremium": 1.8,
+  "createdAt": "2025-05-18T12:00:00"
+}
+----
+
+=== Response `400 Bad Request`
+
+Invalid postal code or data format.
+
+== GET `/api/insurance-request/+{id}+`
+
+Returns a single request by its unique ID.
+
+=== Example
+
+[source,http]
+----
+GET /api/insurance-request/d01a4e35-01c9-4343-b09f-b9bd6eadbbdf
+Accept: application/json
+----
+
+=== Response `200 OK`
+
+Returns the full insurance request data (same structure as POST response).
+
+== GET `/api/insurance-request?page=0&size=20`
+
+Returns a paginated list of requests.
+The default size is 20, page indexing starts at 0.
+
+=== Response
+
+[source,json]
+----
+[
+  {
+    "id": "d01a4e35-01c9-4343-b09f-b9bd6eadbbdf",
+    "postalCode": "50667",
+    "vehicleType": "CAR",
+    "annualMileage": 12000,
+    "calculatedPremium": 2.2,
+    "createdAt": "2025-05-18T12:00:00"
+  }
+]
+----
+
+== DELETE `/api/insurance-request/+{id}+`
+
+Deletes a request by its ID.
+
+=== Example
+
+[source,http]
+----
+DELETE /api/insurance-request/d01a4e35-01c9-4343-b09f-b9bd6eadbbdf
+----
+
+=== Response
+
+[source,json]
+----
+true
+----
+
+== Notes
+
+- All endpoints accept and return `application/json`.
+- Errors follow the standard `ErrorResponse` format.
+- Validation is enforced on input fields (e.g., mileage must be positive).
+

@@ -1,6 +1,6 @@
 name: scopeinsurance
 title: Insurance Calculator
 version: 1.0.0
-start_page: ROOT:overview.adoc
+start_page: modules/ROOT/overview.adoc
 nav:
-  - nav.adoc
+  - modules/ROOT/nav.adoc

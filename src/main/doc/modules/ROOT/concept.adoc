@@ -1,0 +1,18 @@
+= Concept
+Roman Richert <roman.richert.49@gmail.com>
+v1.0.0, 2025-05-19
+:doctype: book
+:toc:
+:icons: font
+:page-aliases: index.adoc
+
+
+include::api:page$overview.adoc[]
+
+include::api:page$insurance-request.adoc[]
+
+include::api:page$postcodes.adoc[]
+
+include::api:page$region-factors.adoc[]
+
+include::api:page$vehicle-factors.adoc[]

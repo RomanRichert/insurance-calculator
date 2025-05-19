@@ -23,7 +23,7 @@ class RequestLoggingInterceptor {
      * Intercepts method execution to log entry, exit, arguments, and return value.
      *
      * - Logs method name, class, and parameters on entry.
-     * - Logs method return value on successful exit.
+     * - Logs methods return value on successful exit.
      * - Logs exception if thrown, and rethrows it.
      */
     @AroundInvoke
@@ -48,7 +48,7 @@ class RequestLoggingInterceptor {
     private fun determineResult(result: Any?): String {
         return when (result) {
             null -> "null"
-            is String -> result
+            is Comparable<*> -> result.toString()
             is JsonObject -> result.encodePrettily()
             is JsonArray -> result.toListOfJsonObjects().map { it.toPrettyJson() + lineSeparator() }.toString()
             is Iterable<*> -> result.map { tryToEncodeAsJson(it) }.toString()

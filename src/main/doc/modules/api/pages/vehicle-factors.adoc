@@ -1,0 +1,39 @@
+= Vehicle Factor API
+:page-aliases: api-vehicle-factors.adoc
+:source-language: http
+
+== Overview
+
+Returns the list of all configured vehicle types and their associated factors.
+These factors are defined via the application config and used during premium calculation.
+
+Base path: `/api/vehicle-factors`
+
+== GET `/api/vehicle-factors`
+
+Returns the static list of all supported vehicle types and their factors.
+
+=== Example Request
+
+[source,http]
+----
+GET /api/vehicle-factors
+----
+
+=== Example Response `200 OK`
+
+[source,json]
+----
+[
+  { "vehicleType": "CAR", "factor": 1.0 },
+  { "vehicleType": "SUV", "factor": 1.2 },
+  { "vehicleType": "TRUCK", "factor": 1.5 },
+  { "vehicleType": "MOTORCYCLE", "factor": 0.8 }
+]
+----
+
+== Notes
+
+- This endpoint is read-only.
+- Vehicle factors are loaded from configuration (`application.yml`) on startup.
+- Used internally by the premium calculation service.
