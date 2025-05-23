@@ -33,7 +33,7 @@ quarkus:
         level: INFO
       "io.quarkus.runtime":
         level: ERROR
-      "com.scopevisio":
+      "com.richert":
         level: INFO
       "io.quarkus.vertx.http":
         level: DEBUG
